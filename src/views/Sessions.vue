@@ -41,6 +41,9 @@ export default {
       }, [])
       return Array.from(new Set(tagsRaw))
     }
+  },
+  created () {
+    window.sessions = this.sessions
   }
 }
 </script>

@@ -15,8 +15,8 @@
 <script>
 import SessionItem from '@/components/SessionItem'
 
-import moment from 'moment'
-import _ from 'lodash'
+import moment from 'moment/min/moment.min'
+import _ from '@/utils'
 
 export default {
   name: 'SessionList',

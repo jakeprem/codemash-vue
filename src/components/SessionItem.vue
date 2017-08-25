@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from 'moment/min/moment.min'
 
 import TagList from '@/components/TagList'
 
