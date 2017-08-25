@@ -31,7 +31,7 @@
 
         </div>
         <div class="column is-6">
-          <session-list :sessions="sessions.data"></session-list>
+          <session-list :sessions="sessions"></session-list>
         </div>
         <div class="column is-3">
           <tag-panel :tags="tags"></tag-panel>
@@ -59,7 +59,7 @@ export default {
   },
   computed: {
     tags () {
-      let tagsRaw = sessions.data.reduce(function (x, y) {
+      let tagsRaw = sessions.reduce(function (x, y) {
         return y.Tags.concat(x)
       }, [])
       return Array.from(new Set(tagsRaw))

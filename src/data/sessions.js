@@ -1,5 +1,4 @@
-export default {
-data: [
+export default [
     {
       "Id": 3663,
       "SessionTime": "0001-01-01T00:00:00",
@@ -776,5 +775,4 @@ data: [
         }
       ]
     }
-  ]
-}
+]
