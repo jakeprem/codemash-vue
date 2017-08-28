@@ -1,0 +1,3 @@
+export const EXAMPLE_CONST = 'EXAMPLE_CONST'
+
+export const SET_SESSIONS = 'SET_SESSIONS'

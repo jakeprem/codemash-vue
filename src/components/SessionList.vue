@@ -16,7 +16,7 @@
 import SessionItem from '@/components/SessionItem'
 
 import moment from 'moment'
-import _ from 'lodash'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'SessionList',
@@ -25,9 +25,9 @@ export default {
     SessionItem
   },
   computed: {
-    sessionsByStartTime () {
-      return _.groupBy(this.sessions, 'SessionStartTime')
-    }
+    ...mapGetters([
+      'sessionsByStartTime'
+    ])
   },
   methods: {
     formatTime (time) {
