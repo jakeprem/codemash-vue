@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import sessions from '@/data/sessions'
+import { mapGetters } from 'vuex'
 
 import SessionList from '@/components/SessionList'
 import TagPanel from '@/components/TagPanel'
@@ -26,7 +26,7 @@ import SchedulePanel from '@/components/SchedulePanel'
 export default {
   data () {
     return {
-      sessions
+      notUsed: ''
     }
   },
   components: {
@@ -35,15 +35,13 @@ export default {
     SchedulePanel
   },
   computed: {
-    tags () {
-      let tagsRaw = sessions.reduce(function (x, y) {
-        return y.Tags.concat(x)
-      }, [])
-      return Array.from(new Set(tagsRaw))
-    }
+    ...mapGetters([
+      'sessions',
+      'tags'
+    ])
   },
   created () {
-    window.sessions = this.sessions
+    this.$store.dispatch('getSessions')
   }
 }
 </script>

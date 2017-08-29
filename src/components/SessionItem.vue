@@ -1,14 +1,15 @@
 <template>
   <div>
-    <h2 class="title is-4"><strong>{{ session.Title }}</strong></h2>
+    <h2 class="title is-4">
+      <strong>{{ session.Title }}</strong>
+      <span class="icon">
+        <i class="fa" :class="{'fa-star': isFilled, 'fa-star-o': !isFilled}"
+        @click='isFilled = !isFilled'
+        >
+        </i>
+      </span>
+    </h2>
     <h3 class="subtitle">{{ speakersDisplayNames(session.Speakers) }}</h3>
-    <!-- <img v-for="speaker in session.Speakers" 
-        :key="speaker.Id"
-        v-if="speaker.GravatarUrl"
-        :src="speaker.GravatarUrl" 
-    /> -->
-    <!-- <h4>{{ formatTime(session.SessionStartTime) }} - {{ formatTime(session.SessionEndTime) }}</h4> -->
-    <!-- <h4 class="">{{ getDate(session.SessionStartTime) }}</h4> -->
     <p>{{ session.Abstract }}</p>
     <h5>{{ session.Category }}</h5>
     <tag-list :tags="session.Tags"></tag-list>
@@ -25,6 +26,11 @@ import TagList from '@/components/TagList'
 export default {
   name: 'SessionItem',
   props: ['session'],
+  data () {
+    return {
+      isFilled: false
+    }
+  },
   methods: {
     speakersDisplayNames (speakers) {
       let speakersNames = speakers.map(function (speaker) {
@@ -46,5 +52,7 @@ export default {
 </script>
 
 <style>
-
+  .icon {
+    color: hsl(171, 100%, 41%);
+  }
 </style>
