@@ -1,3 +1,9 @@
 export const EXAMPLE_CONST = 'EXAMPLE_CONST'
 
 export const SET_SESSIONS = 'SET_SESSIONS'
+
+export const SELECT_TAG = 'SELECT_TAG'
+
+export const UNSELECT_TAG = 'UNSELECT_TAG'
+
+export const CLEAR_SELECTED_TAGS = 'CLEAR_SELECTED_TAGS'

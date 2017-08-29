@@ -6,7 +6,7 @@
     <a class="panel-block"
       v-for="tag in tags" :key="tag" 
       :class="{'is-active': selectedTags.includes(tag)}" 
-      @click="selectTag(tag)"
+      @click="toggleTag(tag)"
     >
       <span class="panel-icon">
         <i class="fa fa-tag"></i>
@@ -14,7 +14,7 @@
       {{ tag }}
     </a>
     <div class="panel-block">
-      <button class="button is-primary is-outlined is-fullwidth" @click="selectedTags = []">
+      <button class="button is-primary is-outlined is-fullwidth" @click="clearSelectedTags">
         Reset All Filters
       </button>
     </div>
@@ -25,28 +25,37 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 import TagList from '@/components/TagList'
 
 export default {
   name: 'TagPanel',
   data () {
     return {
-      selectedTags: []
     }
   },
-  props: ['tags'],
+  // props: ['tags'],
   methods: {
-    selectTag (tag) {
+    ...mapActions([
+      'selectTag',
+      'unselectTag',
+      'clearSelectedTags'
+    ]),
+    toggleTag (tag) {
       var tagIndex = this.selectedTags.indexOf(tag)
       if (tagIndex !== -1) {
-        this.selectedTags.splice(tagIndex, 1)
+        this.unselectTag(tag)
       } else {
-        this.selectedTags.push(tag)
+        this.selectTag(tag)
       }
     }
   },
   computed: {
-
+    ...mapGetters([
+      'tags',
+      'selectedTags'
+    ])
   },
   components: {
     TagList

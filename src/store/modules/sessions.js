@@ -5,7 +5,8 @@ import * as types from '../mutation-types'
 import sessionData from '@/data/sessions'
 
 const state = {
-  sessions: []
+  sessions: [],
+  selectedTags: []
 }
 
 const getters = {
@@ -16,7 +17,8 @@ const getters = {
       return y.Tags.concat(x)
     }, [])
     return Array.from(new Set(tagsRaw))
-  }
+  },
+  selectedTags: state => state.selectedTags
 }
 
 const actions = {
@@ -29,12 +31,33 @@ const actions = {
   // }
   getSessions ({ commit }) {
     commit(types.SET_SESSIONS, sessionData)
+  },
+  selectTag ({ commit }, selectedTag) {
+    commit(types.SELECT_TAG, selectedTag)
+  },
+  unselectTag ({ commit }, unselectedTag) {
+    commit(types.UNSELECT_TAG, unselectedTag)
+  },
+  clearSelectedTags ({ commit }) {
+    commit(types.CLEAR_SELECTED_TAGS)
   }
 }
 
 const mutations = {
   [types.SET_SESSIONS] (state, sessions) {
     state.sessions = sessions
+  },
+  [types.SELECT_TAG] (state, selectedTag) {
+    state.selectedTags.push(selectedTag)
+  },
+  [types.UNSELECT_TAG] (state, unselectedTag) {
+    var tagIndex = state.selectedTags.indexOf(unselectedTag)
+    if (tagIndex !== -1) {
+      state.selectedTags.splice(tagIndex, 1)
+    }
+  },
+  [types.CLEAR_SELECTED_TAGS] (state) {
+    state.selectedTags = []
   }
 }
 
