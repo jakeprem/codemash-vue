@@ -7,6 +7,7 @@ import sessionData from '@/data/sessions'
 const state = {
   sessions: [],
   selectedTags: [],
+  tagAny: true,
   mySchedule: []
 }
 
@@ -15,8 +16,13 @@ const getters = {
   filteredSessions (state) {
     var filteredSessionsData = []
     if (state.selectedTags.length > 0) {
-      filteredSessionsData = state.sessions.filter((x) =>
-        _.intersection(state.selectedTags, x.Tags).length > 0)
+      if (state.tagAny) {
+        filteredSessionsData = state.sessions.filter((x) =>
+          _.intersection(state.selectedTags, x.Tags).length > 0)
+      } else {
+        filteredSessionsData = state.sessions.filter((x) =>
+          _.intersection(state.selectedTags, x.Tags).length === state.selectedTags.length)
+      }
     } else {
       filteredSessionsData = state.sessions
     }
@@ -31,7 +37,8 @@ const getters = {
   },
   mySchedule: state => state.mySchedule,
   myScheduleByStartTime: state => _.groupBy(state.mySchedule, 'SessionStartTime'),
-  selectedTags: state => state.selectedTags
+  selectedTags: state => state.selectedTags,
+  tagAny: state => state.tagAny
 }
 
 const actions = {
@@ -59,6 +66,12 @@ const actions = {
   },
   removeFromSchedule ({ commit }, session) {
     commit(types.REMOVE_FROM_SCHEDULE, session)
+  },
+  setTagAnyFalse ({ commit }) {
+    commit(types.SET_TAG_ANY_FALSE)
+  },
+  setTagAnyTrue ({ commit }) {
+    commit(types.SET_TAG_ANY_TRUE)
   }
 }
 
@@ -87,6 +100,12 @@ const mutations = {
   [types.REMOVE_FROM_SCHEDULE] (state, session) {
     let index = state.mySchedule.map((x) => x.Id).indexOf(session.Id)
     state.mySchedule.splice(index, 1)
+  },
+  [types.SET_TAG_ANY_FALSE] (state) {
+    state.tagAny = false
+  },
+  [types.SET_TAG_ANY_TRUE] (state) {
+    state.tagAny = true
   }
 }
 

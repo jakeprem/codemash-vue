@@ -3,6 +3,10 @@
     <p class="panel-heading">
       Filter by Tags
     </p>
+    <p class="panel-tabs">
+    <a @click="setTagAnyFalse" :class="{'is-active': !tagAny}">All</a>
+      <a @click="setTagAnyTrue" :class="{'is-active': tagAny}">Any</a>
+    </p>
     <a class="panel-block"
       v-for="tag in tags" :key="tag" 
       :class="{'is-active': selectedTags.includes(tag)}" 
@@ -40,7 +44,9 @@ export default {
     ...mapActions([
       'selectTag',
       'unselectTag',
-      'clearSelectedTags'
+      'clearSelectedTags',
+      'setTagAnyTrue',
+      'setTagAnyFalse'
     ]),
     toggleTag (tag) {
       var tagIndex = this.selectedTags.indexOf(tag)
@@ -54,7 +60,8 @@ export default {
   computed: {
     ...mapGetters([
       'tags',
-      'selectedTags'
+      'selectedTags',
+      'tagAny'
     ])
   },
   components: {
