@@ -3,25 +3,36 @@
     <p class="panel-heading">
       My Schedule
     </p>
-    <p class="panel-tabs">
-      Tue, Jan 6: 8:00 AM
-    </p>
-    <div class="panel-block is-active">
-      <ul>
-        <li>Other</li>
-      </ul>
+    <div v-for="(sessionsByTime, startTime) in myScheduleByStartTime" :key="startTime">
+      <p class="panel-tabs">
+        {{ formatTime(startTime) }}
+      </p>
+      <p class="panel-block" v-for="session in sessionsByTime" :key="session.Id" >
+        {{ session.Title }}
+      </p>
     </div>
-    <a class="panel-block">
-      <span class="panel-icon">
-        <i class="fa fa-tag"></i>
-      </span>
-      Hardware
-    </a>
-    <a class="panel-block">
-      <span class="panel-icon">
-        <i class="fa fa-tag"></i>
-      </span>
-      .NET
-    </a>
   </div>
 </template>
+
+<script>
+import moment from 'moment/min/moment.min'
+
+import { mapGetters, mapActions } from 'vuex'
+
+export default {
+  computed: {
+    ...mapGetters([
+      'mySchedule',
+      'myScheduleByStartTime'
+    ])
+  },
+  methods: {
+    ...mapActions([
+    ]),
+    formatTime (time) {
+      return moment(time).format('h:mm A')
+    }
+  }
+}
+</script>
+

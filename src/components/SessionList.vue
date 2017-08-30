@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(sessionsByTime, startTime) in sessionsByStartTime" :key="startTime">      
+    <div v-for="(sessionsByTime, startTime) in filteredSessions" :key="startTime">      
       <h2 class="title">{{ formatTime(startTime) }}</h2>
       <session-item
       v-for="session in sessionsByTime"
@@ -20,13 +20,14 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'SessionList',
-  props: ['sessions'],
+  // props: ['sessions'],
   components: {
     SessionItem
   },
   computed: {
     ...mapGetters([
-      'sessionsByStartTime'
+      'sessionsByStartTime',
+      'filteredSessions'
     ])
   },
   methods: {
