@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <p class="panel-heading">
-      My Schedule
+      <router-link :to="{name: 'MySchedule'}">My Schedule</router-link>
     </p>
     <div v-for="(sessionsByTime, startTime) in myScheduleByStartTime" :key="startTime">
       <p class="panel-tabs">
@@ -30,7 +30,7 @@ export default {
     ...mapActions([
     ]),
     formatTime (time) {
-      return moment(time).format('h:mm A')
+      return moment(time).format('ddd, M/D h:mm A')
     }
   }
 }

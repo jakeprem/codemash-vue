@@ -6,7 +6,7 @@
           <schedule-panel></schedule-panel>
         </div>
         <div class="column is-6">
-          <session-list :sessions="filteredSessions"></session-list>
+          <session-list :sessions="myScheduleByStartTime"></session-list>
         </div>
         <div class="column is-3">
           <tag-panel :tags="tags"></tag-panel>          
@@ -26,7 +26,6 @@ import SchedulePanel from '@/components/SchedulePanel'
 export default {
   data () {
     return {
-      notUsed: ''
     }
   },
   components: {
@@ -36,12 +35,9 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'filteredSessions',
+      'myScheduleByStartTime',
       'tags'
     ])
-  },
-  created () {
-    this.$store.dispatch('getSessions')
   }
 }
 </script>

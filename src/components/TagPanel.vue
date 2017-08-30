@@ -39,7 +39,7 @@ export default {
     return {
     }
   },
-  // props: ['tags'],
+  props: ['tags'],
   methods: {
     ...mapActions([
       'selectTag',
@@ -59,7 +59,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'tags',
+      // 'tags',
       'selectedTags',
       'tagAny'
     ])
