@@ -8,9 +8,6 @@
           <h1 class="title">
             {{ $route.name }}
           </h1>
-          <h2 class="subtitle">
-            {{ $route.path }}
-          </h2>
         </div>
       </div>
     </section>

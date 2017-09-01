@@ -5,7 +5,7 @@
     </p>
     <div v-for="(sessionsByTime, startTime) in myScheduleByStartTime" :key="startTime">
       <p class="panel-tabs">
-        {{ formatTime(startTime) }}
+        <strong>{{ formatTime(startTime) }}</strong>
       </p>
       <p class="panel-block" v-for="session in sessionsByTime" :key="session.Id" >
         {{ session.Title }}

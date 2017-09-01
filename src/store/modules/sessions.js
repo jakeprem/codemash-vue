@@ -26,7 +26,7 @@ const getters = {
     } else {
       filteredSessionsData = state.sessions
     }
-    return _.groupBy(filteredSessionsData, 'SessionStartTime')
+    return filteredSessionsData
   },
   sessionsByStartTime: state => _.groupBy(state.sessions, 'SessionStartTime'),
   tags: state => {
