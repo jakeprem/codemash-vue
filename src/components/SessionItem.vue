@@ -50,13 +50,6 @@ export default {
       return moment(time).format('dddd, MMM Do')
     },
     toggleInSchedule () {
-      // var tagIndex = this.mySchedule.indexOf(this.session.Id)
-      // if (tagIndex !== -1) {
-      //   //
-      // } else {
-      //   // this.removeFromSchedule(this.session)
-      //   this.addToSchedule(this.session.Id)
-      // }
       if (!this.mySchedule.map((x) => x.Id).includes(this.session.Id)) {
         this.addToSchedule(this.session)
       } else {
@@ -69,7 +62,6 @@ export default {
       'mySchedule'
     ]),
     isFilled () {
-      // return this.mySchedule.includes(this.session.Id)
       return this.mySchedule.filter((x) => x.Id === this.session.Id).length > 0
     }
   },

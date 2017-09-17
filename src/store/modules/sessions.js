@@ -28,7 +28,6 @@ const getters = {
     }
     return filteredSessionsData
   },
-  sessionsByStartTime: state => _.groupBy(state.sessions, 'SessionStartTime'),
   tags: state => {
     let tagsRaw = state.sessions.reduce(function (x, y) {
       return y.Tags.concat(x)
@@ -42,13 +41,6 @@ const getters = {
 }
 
 const actions = {
-  // getPosts ({ commit }, limit = 5) {
-  //   return httpGet(`${apiURL}/sessions?page_size=${limit}`)
-  //     .then(({ sessions, pagination }) => {
-  //       commit(types.SET_SESSIONS, sessions)
-  //       commit(types.EXAMPLE_CONST, {...pagination, increment: 5})
-  //     })
-  // }
   getSessions ({ commit }) {
     commit(types.SET_SESSIONS, sessionData)
   },
