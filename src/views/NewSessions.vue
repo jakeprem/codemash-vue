@@ -15,7 +15,7 @@
           <schedule-panel></schedule-panel>
         </div>
         <div class="column is-6">
-          <session-list :sessions="selectedSessions"></session-list>
+          <session-list :sessions="filteredSessions"></session-list>
         </div>
         <div class="column is-3">
           <tag-panel :tags="tags"></tag-panel>
@@ -51,7 +51,9 @@
     computed: {
       ...mapGetters([
         'sessions',
-        'tags'
+        'tags',
+        'selectedTags',
+        'tagAny'
       ]),
       sessionsByDate () {
         return _.groupBy(this.sessions, this.getDate)
@@ -64,6 +66,21 @@
       },
       selectedSessions () {
         return this.sessionsByDate[this.activeDate]
+      },
+      filteredSessions () {
+        var filteredSessionsData = []
+        if (this.selectedTags.length > 0) {
+          if (this.tagAny) {
+            filteredSessionsData = this.selectedSessions.filter((x) =>
+              _.intersection(this.selectedTags, x.Tags).length > 0)
+          } else {
+            filteredSessionsData = this.selectedSessions.filter((x) =>
+              _.intersection(this.selectedTags, x.Tags).length === this.selectedTags.length)
+          }
+        } else {
+          filteredSessionsData = this.sessions
+        }
+        return filteredSessionsData
       }
     },
     methods: {

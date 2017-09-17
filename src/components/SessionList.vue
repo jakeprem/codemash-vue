@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1 v-if="sessions.length == 0">No sessions to show</h1>
     <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
       <div v-for="(sessionsList, startTime) in sessionsByStartTime" :key="startTime">
         <h2 class="title">{{ formatTime(startTime) }}</h2>

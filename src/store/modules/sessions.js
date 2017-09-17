@@ -13,21 +13,6 @@ const state = {
 
 const getters = {
   sessions: state => state.sessions,
-  filteredSessions (state) {
-    var filteredSessionsData = []
-    if (state.selectedTags.length > 0) {
-      if (state.tagAny) {
-        filteredSessionsData = state.sessions.filter((x) =>
-          _.intersection(state.selectedTags, x.Tags).length > 0)
-      } else {
-        filteredSessionsData = state.sessions.filter((x) =>
-          _.intersection(state.selectedTags, x.Tags).length === state.selectedTags.length)
-      }
-    } else {
-      filteredSessionsData = state.sessions
-    }
-    return filteredSessionsData
-  },
   tags: state => {
     let tagsRaw = state.sessions.reduce(function (x, y) {
       return y.Tags.concat(x)
