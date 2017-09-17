@@ -15,7 +15,7 @@
           <schedule-panel></schedule-panel>
         </div>
         <div class="column is-6">
-          <session-list :sessions="filteredSessions"></session-list>
+          <session-list :sessions="selectedSessions"></session-list>
         </div>
         <div class="column is-3">
           <tag-panel :tags="tags"></tag-panel>
@@ -56,10 +56,15 @@
         'tagAny'
       ]),
       sessionsByDate () {
-        return _.groupBy(this.sessions, this.getDate)
+        return _.groupBy(this.filteredSessions, this.getDate)
       },
       dates () {
-        return Object.keys(this.sessionsByDate)
+        let dates = Object.keys(this.sessionsByDate)
+
+        if (!dates.includes(this.selectedDate)) {
+          this.selectedDate = ''
+        }
+        return dates
       },
       activeDate () {
         return this.selectedDate || this.dates[0]
@@ -71,14 +76,14 @@
         var filteredSessionsData = []
         if (this.selectedTags.length > 0) {
           if (this.tagAny) {
-            filteredSessionsData = this.selectedSessions.filter((x) =>
+            filteredSessionsData = this.sessions.filter((x) =>
               _.intersection(this.selectedTags, x.Tags).length > 0)
           } else {
-            filteredSessionsData = this.selectedSessions.filter((x) =>
+            filteredSessionsData = this.sessions.filter((x) =>
               _.intersection(this.selectedTags, x.Tags).length === this.selectedTags.length)
           }
         } else {
-          filteredSessionsData = this.selectedSessions
+          filteredSessionsData = this.sessions
         }
         return filteredSessionsData
       }

@@ -3,6 +3,7 @@ import _ from 'lodash'
 import * as types from '../mutation-types'
 
 import sessionData from '@/data/sessions'
+// import sessionData from '@/data/kizmash_sessions'
 
 const state = {
   sessions: [],
