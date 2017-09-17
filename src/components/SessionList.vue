@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 v-if="sessions.length == 0">No sessions to show</h1>
+    <h1 v-if="!sessions || sessions.length == 0">No sessions to show</h1>
     <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
       <div v-for="(sessionsList, startTime) in sessionsByStartTime" :key="startTime">
         <h2 class="title">{{ formatTime(startTime) }}</h2>
@@ -49,7 +49,11 @@ export default {
   },
   computed: {
     visibleSessions () {
-      return this.sessions.slice(0, this.pageSize)
+      if (this.sessions && this.sessions.length) {
+        return this.sessions.slice(0, this.pageSize)
+      } else {
+        return []
+      }
     },
     sessionsByStartTime () {
       return _.groupBy(this.visibleSessions, 'SessionStartTime')
