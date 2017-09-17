@@ -1,8 +1,14 @@
 <template>
   <div class="panel">
-    <p class="panel-heading">
-      Filter by Tags
+    <p class="panel-heading" @click="isHidden = !isHidden">
+      <a>
+        Filter by Tags        
+      </a>
+      <span class="icon is-small" style=" vertical-align: middle;">
+          <i class="fa" :class="{'fa-chevron-right': isHidden, 'fa-chevron-down': !isHidden}"></i>
+      </span>
     </p>
+    <template v-if="!isHidden">
     <p class="panel-tabs">
     <a @click="setTagAnyFalse" :class="{'is-active': !tagAny}">All</a>
       <a @click="setTagAnyTrue" :class="{'is-active': tagAny}">Any</a>
@@ -17,14 +23,15 @@
       </span>
       {{ tag }}
     </a>
+    </template>
     <div class="panel-block">
       <button class="button is-primary is-outlined is-fullwidth" @click="clearSelectedTags">
-        Reset All Filters
+        Reset Tag Filters
       </button>
     </div>
     <div class="panel-block" v-show="selectedTags.length > 0">
       <tag-list :tags="selectedTags"></tag-list>
-    </div>
+    </div>    
   </div>
 </template>
 
@@ -37,6 +44,7 @@ export default {
   name: 'TagPanel',
   data () {
     return {
+      isHidden: false
     }
   },
   props: ['tags'],

@@ -19,6 +19,7 @@
         </div>
         <div class="column is-3">
           <tag-panel :tags="tags"></tag-panel>
+          <tag-panel :tags="startTimes" />
         </div>
       </div>
     </div>
@@ -86,11 +87,18 @@
           filteredSessionsData = this.sessions
         }
         return filteredSessionsData
+      },
+      startTimes () {
+        let startTimes = this.sessions.map(x => this.formatTime(x.SessionStartTime))
+        return _.uniq(startTimes)
       }
     },
     methods: {
       getDate (session) {
         return moment(session.SessionStartTime).format('ddd, MMM Do, YY')
+      },
+      formatTime (time) {
+        return moment(time).format('h:mm A')
       },
       selectDate (clickedDate) {
         this.selectedDate = clickedDate
