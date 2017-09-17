@@ -1,44 +1,21 @@
 <template>
   <section class="section main">
     <div class="container">
-      <div class="columns has-text-centered">
-        <div class="column">
-          <p class="title">
-              <span class="icon is-medium">
-                <i
-                  @click="pageNumber--"
-                  v-show="canPageBackward"
-                  class="fa fa-chevron-left"
-                  aria-hidden="true">
-                </i>
-              </span>
-              {{ this.pageDate }}
-              <span class="icon is-medium">
-                <i
-                  @click="pageNumber++"
-                  v-show="canPageForward"
-                  class="fa fa-chevron-right"
-                  aria-hidden="true">
-                </i>
-              </span>
-            </p>
-        </div>
+      <div class="tabs is-medium is-centered">
+        <ul>
+          <li
+            v-for="date in dates"
+            :key="date"
+            @click="selectDate(date)"
+            :class="{'is-active': activeDate == date}"><a>{{date}}</a></li>
+        </ul>
       </div>
       <div class="columns">
         <div class="column is-3">
           <schedule-panel></schedule-panel>
         </div>
         <div class="column is-6">
-          <div class="tabs">
-            <ul>
-              <li 
-                v-for="item in pageDates" 
-                :key="item"
-                @click="pageDate = item"
-                :class="{'is-active': pageDate == item}"><a>{{item}}</a></li>
-            </ul>
-          </div>
-          <session-list :sessions="pagedSessions"></session-list>
+          <session-list :sessions="filteredSessions"></session-list>
         </div>
         <div class="column is-3">
           <tag-panel :tags="tags"></tag-panel>
@@ -49,60 +26,76 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+  import { mapGetters } from 'vuex'
 
-import _ from 'lodash'
-import moment from 'moment/min/moment.min'
+  import _ from 'lodash'
+  import moment from 'moment/min/moment.min'
 
-import SessionList from '@/components/SessionList'
-import TagPanel from '@/components/TagPanel'
-import SchedulePanel from '@/components/SchedulePanel'
+  import SessionList from '@/components/SessionList'
+  import TagPanel from '@/components/TagPanel'
+  import SchedulePanel from '@/components/SchedulePanel'
 
-export default {
-  data () {
-    return {
-      pageNumber: 0,
-      pageSize: 10,
-      pageDates: '',
-      pageDate: ''
-    }
-  },
-  components: {
-    SessionList,
-    TagPanel,
-    SchedulePanel
-  },
-  computed: {
-    ...mapGetters([
-      'filteredSessions',
-      'tags'
-    ]),
-    pagedSessions () {
-      // let pagedSessionData = this.filteredSessions.slice(this.pageNumber * this.pageSize, (this.pageNumber + 1) * this.pageSize)
-      let groupedSessions = _.groupBy(this.filteredSessions, this.getDate)
-      let pagedSessions = groupedSessions[this.pageDate]
-      this.pageDates = Object.keys(groupedSessions)
-      return _.groupBy(pagedSessions, 'SessionStartTime')
+  export default {
+    data () {
+      return {
+        page: 0,
+        pageSize: 10,
+        selectedDate: ''
+      }
     },
-    pageDate () {
-      return this.pageDates[this.pageNumber]
+    components: {
+      SessionList,
+      TagPanel,
+      SchedulePanel
     },
-    canPageForward () {
-      return this.pageNumber < (this.pageDates.length - 1)
+    computed: {
+      ...mapGetters([
+        'sessions',
+        'tags',
+        'selectedTags',
+        'tagAny'
+      ]),
+      sessionsByDate () {
+        return _.groupBy(this.sessions, this.getDate)
+      },
+      dates () {
+        return Object.keys(this.sessionsByDate)
+      },
+      activeDate () {
+        return this.selectedDate || this.dates[0]
+      },
+      selectedSessions () {
+        return this.sessionsByDate[this.activeDate]
+      },
+      filteredSessions () {
+        var filteredSessionsData = []
+        if (this.selectedTags.length > 0) {
+          if (this.tagAny) {
+            filteredSessionsData = this.selectedSessions.filter((x) =>
+              _.intersection(this.selectedTags, x.Tags).length > 0)
+          } else {
+            filteredSessionsData = this.selectedSessions.filter((x) =>
+              _.intersection(this.selectedTags, x.Tags).length === this.selectedTags.length)
+          }
+        } else {
+          filteredSessionsData = this.selectedSessions
+        }
+        return filteredSessionsData
+      }
     },
-    canPageBackward () {
-      return this.pageNumber > 0
+    methods: {
+      getDate (session) {
+        return moment(session.SessionStartTime).format('ddd, MMM Do, YY')
+      },
+      selectDate (clickedDate) {
+        this.selectedDate = clickedDate
+        this.page = 0
+      }
+    },
+    created () {
+      this.$store.dispatch('getSessions')
     }
-  },
-  methods: {
-    getDate (session) {
-      return moment(session.SessionStartTime).format('ddd, MMM Do, YY')
-    }
-  },
-  created () {
-    this.$store.dispatch('getSessions')
   }
-}
 </script>
 
 <style>

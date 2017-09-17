@@ -6,10 +6,10 @@
           <schedule-panel></schedule-panel>
         </div>
         <div class="column is-6">
-          <session-list :sessions="myScheduleByStartTime"></session-list>
+          <session-list :sessions="mySchedule"></session-list>
         </div>
         <div class="column is-3">
-          <tag-panel :tags="tags"></tag-panel>          
+          <!-- <tag-panel :tags="tags"></tag-panel> -->
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'myScheduleByStartTime',
+      'mySchedule',
       'tags'
     ])
   }

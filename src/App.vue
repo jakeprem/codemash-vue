@@ -2,15 +2,6 @@
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
     <app-navbar></app-navbar>
-    <!-- <!-- <section class="hero"> -->
-      <div class="hero-body">
-        <div class="container has-text-centered">
-          <h1 class="title">
-            {{ $route.name }}
-          </h1>
-        </div>
-      </div>
-    </section>
     <router-view></router-view>
     <app-footer></app-footer>
   </div>

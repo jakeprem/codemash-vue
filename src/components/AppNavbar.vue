@@ -1,7 +1,17 @@
 <template>
-  <nav class="nav has-shadow">
+  <nav class="nav has-shadow" id="top">
     <div class="container">
       <div class="nav-left">
+        <a class="nav-item" href="../index.html">
+          <img src="../assets/logo.png" alt="Description">
+        </a>
+      </div>
+      <span class="nav-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div class="nav-right nav-menu">
         <router-link 
           v-for="link in navLinks"
           :key="link.name"
@@ -13,31 +23,12 @@
           <i class="fa" :class="link.icon"></i> 
           &nbsp; {{ link.text || link.name }}
         </router-link>
-        <!-- <a class="nav-item is-tab"><i class="fa fa-bell-o"></i> &nbsp; Notifications</a> -->
-        <a class="nav-item is-tab"><i class="fa fa-envelope"></i> &nbsp; Messages</a>
-      </div>
-
-      <div class="nav-center">
-        <a class="nav-item" href="#">
-          <span class="icon">
-            <i class="fa fa-code"></i>
-          </span>
-        </a>
-      </div>
-
-      <span class="nav-toggle">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-
-      <div class="nav-right nav-menu">
         <span class="nav-item">
-          <a class="button" >
-            <span class="icon">
-              <i class="fa fa-twitter"></i>
-            </span>
-            <span>Tweet</span>
+          <a class="button">
+            Log in
+          </a>
+          <a class="button is-info">
+            Sign up
           </a>
         </span>
       </div>
@@ -61,11 +52,6 @@ export default {
           name: 'MySchedule',
           icon: 'fa-bolt',
           text: 'My Schedule'
-        },
-        {
-          name: 'NewSessions',
-          icon: 'fa-home',
-          text: 'New Sessions'
         }
       ]
     }
