@@ -15,13 +15,6 @@
           <schedule-panel></schedule-panel>
         </div>
         <div class="column is-6">
-          <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-            <a class="pagination-previous">Previous</a>
-            <a class="pagination-next">Next page</a>
-            <ul class="pagination-list">
-              <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>              
-            </ul>
-          </nav>
           <session-list :sessions="selectedSessions"></session-list>
         </div>
         <div class="column is-3">
