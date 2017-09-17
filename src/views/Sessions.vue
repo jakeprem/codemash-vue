@@ -3,7 +3,7 @@
     <div class="container">
       <div class="columns has-text-centered">
         <div class="column">
-            <p class="title">
+          <p class="title">
               <span class="icon is-medium">
                 <i
                   @click="pageNumber--"
@@ -11,7 +11,7 @@
                   class="fa fa-chevron-left"
                   aria-hidden="true">
                 </i>
-              </span>              
+              </span>
               {{ this.pageDate }}
               <span class="icon is-medium">
                 <i
@@ -22,19 +22,26 @@
                 </i>
               </span>
             </p>
-          
         </div>
-        <div class="is-4"></div>
       </div>
       <div class="columns">
         <div class="column is-3">
           <schedule-panel></schedule-panel>
         </div>
-        <div class="column is-6">         
+        <div class="column is-6">
+          <div class="tabs">
+            <ul>
+              <li 
+                v-for="item in pageDates" 
+                :key="item"
+                @click="pageDate = item"
+                :class="{'is-active': pageDate == item}"><a>{{item}}</a></li>
+            </ul>
+          </div>
           <session-list :sessions="pagedSessions"></session-list>
         </div>
         <div class="column is-3">
-          <tag-panel :tags="tags"></tag-panel>          
+          <tag-panel :tags="tags"></tag-panel>
         </div>
       </div>
     </div>
@@ -56,7 +63,8 @@ export default {
     return {
       pageNumber: 0,
       pageSize: 10,
-      pageDates: ''
+      pageDates: '',
+      pageDate: ''
     }
   },
   components: {
@@ -72,7 +80,7 @@ export default {
     pagedSessions () {
       // let pagedSessionData = this.filteredSessions.slice(this.pageNumber * this.pageSize, (this.pageNumber + 1) * this.pageSize)
       let groupedSessions = _.groupBy(this.filteredSessions, this.getDate)
-      let pagedSessions = groupedSessions[Object.keys(groupedSessions)[this.pageNumber]]
+      let pagedSessions = groupedSessions[this.pageDate]
       this.pageDates = Object.keys(groupedSessions)
       return _.groupBy(pagedSessions, 'SessionStartTime')
     },

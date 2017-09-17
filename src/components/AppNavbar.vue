@@ -13,7 +13,7 @@
           <i class="fa" :class="link.icon"></i> 
           &nbsp; {{ link.text || link.name }}
         </router-link>
-        <a class="nav-item is-tab"><i class="fa fa-bell-o"></i> &nbsp; Notifications</a>
+        <!-- <a class="nav-item is-tab"><i class="fa fa-bell-o"></i> &nbsp; Notifications</a> -->
         <a class="nav-item is-tab"><i class="fa fa-envelope"></i> &nbsp; Messages</a>
       </div>
 
@@ -61,6 +61,11 @@ export default {
           name: 'MySchedule',
           icon: 'fa-bolt',
           text: 'My Schedule'
+        },
+        {
+          name: 'NewSessions',
+          icon: 'fa-home',
+          text: 'New Sessions'
         }
       ]
     }
