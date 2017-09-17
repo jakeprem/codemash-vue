@@ -78,7 +78,7 @@
               _.intersection(this.selectedTags, x.Tags).length === this.selectedTags.length)
           }
         } else {
-          filteredSessionsData = this.sessions
+          filteredSessionsData = this.selectedSessions
         }
         return filteredSessionsData
       }
