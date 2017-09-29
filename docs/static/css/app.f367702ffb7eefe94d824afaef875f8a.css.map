@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack:///./src/components/TagPanel.vue"],"names":[],"mappings":"AACA,mCACE,aAAe","file":"static/css/app.f367702ffb7eefe94d824afaef875f8a.css","sourcesContent":["\n.panel-block.is-active .panel-icon {\n  color: #00d1b2;\n}\n\n\n\n// WEBPACK FOOTER //\n// ./src/components/TagPanel.vue"],"sourceRoot":""}
