@@ -18,8 +18,11 @@
           <session-list :sessions="selectedSessions"></session-list>
         </div>
         <div class="column is-3">
+          <div class="panel">
+            <input type="text" class="input" placeholder="Search" v-model="search">
+          </div>        
           <tag-panel :tags="tags"></tag-panel>
-          <tag-panel :tags="startTimes" />
+          <!-- <tag-panel :tags="startTimes" /> -->
         </div>
       </div>
     </div>
@@ -31,6 +34,7 @@
 
   import _ from 'lodash'
   import moment from 'moment/min/moment.min'
+  import Fuse from 'fuse.js'
 
   import SessionList from '@/components/SessionList'
   import TagPanel from '@/components/TagPanel'
@@ -41,7 +45,8 @@
       return {
         page: 0,
         pageSize: 10,
-        selectedDate: ''
+        selectedDate: '',
+        search: ''
       }
     },
     components: {
@@ -74,17 +79,38 @@
         return this.sessionsByDate[this.activeDate]
       },
       filteredSessions () {
+        let options = {
+          shouldSort: true,
+          threshold: 0.6,
+          location: 0,
+          distance: 100,
+          maxPatternLength: 32,
+          minMatchCharLength: 1,
+          keys: [
+            'Title',
+            'Abstract',
+            'Category',
+            'Tags'
+          ]
+        }
+        var fuse = new Fuse(this.sessions, options)
+        var results = fuse.search(this.search)
+
+        if (this.search === '') {
+          results = this.sessions
+        }
+
         var filteredSessionsData = []
         if (this.selectedTags.length > 0) {
           if (this.tagAny) {
-            filteredSessionsData = this.sessions.filter((x) =>
+            filteredSessionsData = results.filter((x) =>
               _.intersection(this.selectedTags, x.Tags).length > 0)
           } else {
-            filteredSessionsData = this.sessions.filter((x) =>
+            filteredSessionsData = results.filter((x) =>
               _.intersection(this.selectedTags, x.Tags).length === this.selectedTags.length)
           }
         } else {
-          filteredSessionsData = this.sessions
+          filteredSessionsData = results
         }
         return filteredSessionsData
       },
