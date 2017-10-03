@@ -6,7 +6,8 @@ import store from './store'
 import VueAnalytics from 'vue-analytics'
 
 Vue.use(VueAnalytics, {
-  id: 'UA-74836913-3'
+  id: 'UA-74836913-3',
+  router
 })
 
 Vue.config.productionTip = false
