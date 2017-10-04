@@ -20,7 +20,7 @@
         <div class="column is-3">
           <div class="panel">
             <input type="text" class="input" placeholder="Search" v-model="search">
-          </div>        
+          </div>
           <tag-panel :tags="tags"></tag-panel>
           <!-- <tag-panel :tags="startTimes" /> -->
         </div>

@@ -2,9 +2,10 @@
   <nav class="nav has-shadow" id="top">
     <div class="container">
       <div class="nav-left">
-        <a class="nav-item" href="../index.html">
-          <img src="../assets/logo.png" alt="Description">
-        </a>
+        <!-- <a class="nav-item" href="../index.html">
+          <img src="../assets/logo.png" alt="Codemash Vue">
+        </a> -->
+        <!-- <p class="title">Codemash Vue</p> -->
       </div>
       <span class="nav-toggle">
         <span></span>
@@ -23,14 +24,14 @@
           <i class="fa" :class="link.icon"></i> 
           &nbsp; {{ link.text || link.name }}
         </router-link>
-        <span class="nav-item">
+        <!-- <span class="nav-item">
           <a class="button">
             Log in
           </a>
           <a class="button is-info">
             Sign up
           </a>
-        </span>
+        </span> -->
       </div>
     </div>
   </nav>
@@ -47,6 +48,11 @@ export default {
           icon: 'fa-home',
           text: 'Home',
           exact: true
+        },
+        {
+          name: 'SessionsTable',
+          icon: 'fa-table',
+          text: 'Sessions Table'
         },
         {
           name: 'MySchedule',
