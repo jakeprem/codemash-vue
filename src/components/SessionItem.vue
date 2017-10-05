@@ -12,7 +12,7 @@
     <h3 class="subtitle">{{ speakersDisplayNames(session.Speakers) }}</h3>
     <p>{{ session.Abstract }}</p>
     <h5><strong>{{ session.Category }}</strong></h5>
-    <tag-list :tags="session.Tags"></tag-list>
+    <tag-list :tags="session.Tags" :selectedTags="selectedTags"></tag-list>
     <div v-show="false">{{ session }}</div>
     <hr>
   </div>
@@ -59,7 +59,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'mySchedule'
+      'mySchedule',
+      'selectedTags'
     ]),
     isFilled () {
       return this.mySchedule.filter((x) => x.Id === this.session.Id).length > 0

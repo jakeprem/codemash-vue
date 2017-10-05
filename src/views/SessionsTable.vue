@@ -10,6 +10,7 @@
             <tr>
               <th>Title</th>
               <th>Speaker</th>
+              <th>Session Type</th>
               <th>Category</th>
               <th>Tags</th>
             </tr>
@@ -19,11 +20,12 @@
               <tr @click="toggleTab(session.Id)">
                 <td><strong>{{session.Title}}</strong></td>
                 <td>{{speakersDisplayNames(session.Speakers)}}</td>
+                <th>{{session.SessionType}}</th>
                 <td>{{session.Category}}</td>
                 <td><tag-list :tags="session.Tags"></tag-list></td>
               </tr>
               <tr v-show="expandedTab == session.Id">
-                <td colspan="4">{{session.Abstract}}</td>
+                <td colspan="5">{{session.Abstract}}</td>
               </tr>
             </template>
           </tbody>
@@ -51,7 +53,7 @@ export default {
       page: 0,
       pageSize: 25,
       stepSize: 25,
-      expandedTab: 6938,
+      expandedTab: '',
       search: ''
     }
   },
@@ -74,7 +76,8 @@ export default {
           'Title',
           'Abstract',
           'Category',
-          'Tags'
+          'Tags',
+          'SessionType'
         ]
       }
       var fuse = new Fuse(this.sessions, options)

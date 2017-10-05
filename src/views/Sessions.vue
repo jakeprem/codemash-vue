@@ -12,6 +12,8 @@
       </div>
       <div class="columns">
         <div class="column is-3">
+          <!-- This should be removed once persistence is added -JBP 10/4/17 -->
+          This doesn't currently persist anywhere
           <schedule-panel></schedule-panel>
         </div>
         <div class="column is-6">
@@ -62,7 +64,9 @@
         'tagAny'
       ]),
       sessionsByDate () {
-        return _.groupBy(this.filteredSessions, this.getDate)
+        // This shoul be reverted when the scheduled sessions list is published -JBP 10/4/17
+        // return _.groupBy(this.filteredSessions, this.getDate)
+        return _.groupBy(this.filteredSessions, 'SessionType')
       },
       dates () {
         let dates = Object.keys(this.sessionsByDate)
@@ -90,7 +94,8 @@
             'Title',
             'Abstract',
             'Category',
-            'Tags'
+            'Tags',
+            'SessionType'
           ]
         }
         var fuse = new Fuse(this.sessions, options)
