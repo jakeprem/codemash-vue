@@ -50,7 +50,7 @@ export default {
       return moment(time).format('dddd, MMM Do')
     },
     toggleInSchedule () {
-      if (!this.mySchedule.map((x) => x.Id).includes(this.session.Id)) {
+      if (!this.mySchedule.includes(this.session.Id)) {
         this.addToSchedule(this.session)
       } else {
         this.removeFromSchedule(this.session)
@@ -63,7 +63,7 @@ export default {
       'selectedTags'
     ]),
     isFilled () {
-      return this.mySchedule.filter((x) => x.Id === this.session.Id).length > 0
+      return this.mySchedule.filter((x) => x === this.session.Id).length > 0
     }
   },
   components: {

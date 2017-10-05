@@ -70,13 +70,13 @@ const mutations = {
     state.selectedTags = []
   },
   [types.ADD_TO_SCHEDULE] (state, session) {
-    state.mySchedule.push(session)
+    state.mySchedule.push(session.Id)
     state.mySchedule.sort(function (x, y) {
       return new Date(x.SessionStartTime) - new Date(y.SessionStartTime)
     })
   },
   [types.REMOVE_FROM_SCHEDULE] (state, session) {
-    let index = state.mySchedule.map((x) => x.Id).indexOf(session.Id)
+    let index = state.mySchedule.map((x) => x).indexOf(session.Id)
     state.mySchedule.splice(index, 1)
   },
   [types.SET_TAG_ANY_FALSE] (state) {

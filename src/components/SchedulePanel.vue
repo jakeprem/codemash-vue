@@ -3,7 +3,7 @@
     <p class="panel-heading">
       <router-link :to="{name: 'MySchedule'}">My Schedule</router-link>
     </p>
-    <div v-for="(sessionsByTime, startTime) in myScheduleByStartTime" :key="startTime">
+    <div v-for="(sessionsByTime, startTime) in mySessionsByStartTime" :key="startTime">
       <p class="panel-tabs">
         <strong>{{ formatTime(startTime) }}</strong>
       </p>
@@ -16,6 +16,7 @@
 
 <script>
 import moment from 'moment/min/moment.min'
+import _ from 'lodash'
 
 import { mapGetters, mapActions } from 'vuex'
 
@@ -23,8 +24,15 @@ export default {
   computed: {
     ...mapGetters([
       'mySchedule',
-      'myScheduleByStartTime'
-    ])
+      'myScheduleByStartTime',
+      'sessions'
+    ]),
+    mySessions () {
+      return this.sessions.filter(x => this.mySchedule.includes(x.Id))
+    },
+    mySessionsByStartTime () {
+      return _.groupBy(this.mySessions, 'SessionStartTime')
+    }
   },
   methods: {
     ...mapActions([
