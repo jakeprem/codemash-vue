@@ -21,7 +21,8 @@
         </div>
         <div class="column is-3">
           <div class="panel">
-            <input type="text" class="input" placeholder="Search" v-model="search">
+            <!-- <input type="text" class="input" placeholder="Search" v-model="search"> -->
+            Search is currently disabled on this page.
           </div>
           <tag-panel :tags="tags"></tag-panel>
           <!-- <tag-panel :tags="startTimes" /> -->
@@ -36,7 +37,7 @@
 
   import _ from 'lodash'
   import moment from 'moment/min/moment.min'
-  import Fuse from 'fuse.js'
+  // import Fuse from 'fuse.js'
 
   import SessionList from '@/components/SessionList'
   import TagPanel from '@/components/TagPanel'
@@ -64,9 +65,7 @@
         'tagAny'
       ]),
       sessionsByDate () {
-        // This shoul be reverted when the scheduled sessions list is published -JBP 10/4/17
-        // return _.groupBy(this.filteredSessions, this.getDate)
-        return _.groupBy(this.filteredSessions, 'SessionType')
+        return _.groupBy(this.filteredSessions, this.getDate)
       },
       dates () {
         let dates = Object.keys(this.sessionsByDate)
@@ -83,27 +82,29 @@
         return this.sessionsByDate[this.activeDate]
       },
       filteredSessions () {
-        let options = {
-          shouldSort: true,
-          threshold: 0.6,
-          location: 0,
-          distance: 100,
-          maxPatternLength: 32,
-          minMatchCharLength: 1,
-          keys: [
-            'Title',
-            'Abstract',
-            'Category',
-            'Tags',
-            'SessionType'
-          ]
-        }
-        var fuse = new Fuse(this.sessions, options)
-        var results = fuse.search(this.search)
-
-        if (this.search === '') {
-          results = this.sessions
-        }
+        // TODO Renable search: Search needs to be run against each individual day so that sorting by search relevance will still
+        // work correctly.
+        // let options = {
+        //   shouldSort: true,
+        //   threshold: 0.6,
+        //   location: 0,
+        //   distance: 100,
+        //   maxPatternLength: 32,
+        //   minMatchCharLength: 1,
+        //   keys: [
+        //     'Title',
+        //     'Abstract',
+        //     'Category',
+        //     'Tags',
+        //     'SessionType'
+        //   ]
+        // }
+        // var fuse = new Fuse(this.sessions, options)
+        // var results = fuse.search(this.search)
+        // if (this.search === '') {
+        //   results = this.sessions
+        // }
+        var results = this.sessions
 
         var filteredSessionsData = []
         if (this.selectedTags.length > 0) {
@@ -137,7 +138,9 @@
       }
     },
     created () {
-      this.$store.dispatch('getSessions')
+      if (this.sessions.length === 0) {
+        this.$store.dispatch('getSessions')
+      }
     }
   }
 </script>

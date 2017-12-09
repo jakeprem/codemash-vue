@@ -2,8 +2,28 @@ import _ from 'lodash'
 
 import * as types from '../mutation-types'
 
-import sessionData from '@/data/sessions'
+// import sessionData from '@/data/sessions'
 // import sessionData from '@/data/kizmash_sessions'
+
+var ajax = {
+  getSessionsData () {
+    let promise = new Promise((resolve, reject) => {
+      var url = 'https://speakers.codemash.org/api/sessionsdata?type=json'
+      var xhr = new XMLHttpRequest()
+      xhr.open('GET', url)
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          resolve(xhr.responseText)
+        } else {
+          reject('Ajax failed')
+        }
+      }
+      xhr.send()
+    })
+
+    return promise
+  }
+}
 
 const state = {
   sessions: [],
@@ -28,7 +48,13 @@ const getters = {
 
 const actions = {
   getSessions ({ commit }) {
-    commit(types.SET_SESSIONS, sessionData)
+    return new Promise((resolve) => {
+      ajax.getSessionsData().then((data) => {
+        let sessionData = JSON.parse(data)
+        commit(types.SET_SESSIONS, sessionData)
+        resolve()
+      })
+    })
   },
   selectTag ({ commit }, selectedTag) {
     commit(types.SELECT_TAG, selectedTag)

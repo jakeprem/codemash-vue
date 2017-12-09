@@ -8,6 +8,8 @@
         <table class="table is-bordered is-striped">
           <thead>
             <tr>
+              <th>Day</th>
+              <th>Time</th>
               <th>Title</th>
               <th>Speaker</th>
               <th>Session Type</th>
@@ -18,6 +20,8 @@
           <tbody>
             <template v-for="session in visibleSessions">
               <tr @click="toggleTab(session.Id)">
+                <td>{{formatDate(session.SessionStartTime)}}
+                <td>{{formatTime(session.SessionStartTime)}}</td>
                 <td><strong>{{session.Title}}</strong></td>
                 <td>{{speakersDisplayNames(session.Speakers)}}</td>
                 <th>{{session.SessionType}}</th>
@@ -25,7 +29,7 @@
                 <td><tag-list :tags="session.Tags"></tag-list></td>
               </tr>
               <tr v-show="expandedTab == session.Id">
-                <td colspan="5">{{session.Abstract}}</td>
+                <td colspan="7">{{session.Abstract}}</td>
               </tr>
             </template>
           </tbody>
@@ -43,6 +47,7 @@ import TagList from '@/components/TagList'
 // import _ from 'lodash'
 // import moment from 'moment/min/moment.min'
 import Fuse from 'fuse.js'
+import moment from 'moment/min/moment.min'
 import infiniteScroll from 'vue-infinite-scroll'
 
 export default {
@@ -107,13 +112,21 @@ export default {
     },
     loadMore () {
       this.pageSize += this.stepSize
+    },
+    formatTime (time) {
+      return moment(time).format('h:mm A')
+    },
+    formatDate (date) {
+      return moment(date).format('ddd, MMM Do')
     }
   },
   components: {
     TagList
   },
   created () {
-    this.$store.dispatch('getSessions')
+    if (this.sessions.length === 0) {
+      this.$store.dispatch('getSessions')
+    }
   }
 }
 </script>
