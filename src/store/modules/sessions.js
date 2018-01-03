@@ -41,7 +41,16 @@ const getters = {
     return Array.from(new Set(tagsRaw))
   },
   mySchedule: state => state.mySchedule,
-  myScheduleByStartTime: state => _.groupBy(state.mySchedule, 'SessionStartTime'),
+  mySessions: state => state.sessions.filter(x => state.mySchedule.includes(x.Id)),
+  myScheduleByStartTime: state => {
+    let mySessions = state.sessions.filter(x => state.mySchedule.includes(x.Id))
+
+    mySessions.sort(function (x, y) {
+      return new Date(x.SessionStartTime) - new Date(y.SessionStartTime)
+    })
+
+    return _.groupBy(mySessions, 'SessionStartTime')
+  },
   selectedTags: state => state.selectedTags,
   tagAny: state => state.tagAny
 }
@@ -65,11 +74,11 @@ const actions = {
   clearSelectedTags ({ commit }) {
     commit(types.CLEAR_SELECTED_TAGS)
   },
-  addToSchedule ({ commit }, session) {
-    commit(types.ADD_TO_SCHEDULE, session)
+  addToSchedule ({ commit }, sessionId) {
+    commit(types.ADD_TO_SCHEDULE, sessionId)
   },
-  removeFromSchedule ({ commit }, session) {
-    commit(types.REMOVE_FROM_SCHEDULE, session)
+  removeFromSchedule ({ commit }, sessionId) {
+    commit(types.REMOVE_FROM_SCHEDULE, sessionId)
   },
   setTagAnyFalse ({ commit }) {
     commit(types.SET_TAG_ANY_FALSE)
@@ -95,14 +104,11 @@ const mutations = {
   [types.CLEAR_SELECTED_TAGS] (state) {
     state.selectedTags = []
   },
-  [types.ADD_TO_SCHEDULE] (state, session) {
-    state.mySchedule.push(session)
-    state.mySchedule.sort(function (x, y) {
-      return new Date(x.SessionStartTime) - new Date(y.SessionStartTime)
-    })
+  [types.ADD_TO_SCHEDULE] (state, sessionId) {
+    state.mySchedule.push(sessionId)
   },
-  [types.REMOVE_FROM_SCHEDULE] (state, session) {
-    let index = state.mySchedule.map((x) => x.Id).indexOf(session.Id)
+  [types.REMOVE_FROM_SCHEDULE] (state, sessionId) {
+    let index = state.mySchedule.indexOf(sessionId)
     state.mySchedule.splice(index, 1)
   },
   [types.SET_TAG_ANY_FALSE] (state) {

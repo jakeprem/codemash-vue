@@ -12,7 +12,8 @@
     <h3 class="subtitle">{{ speakersDisplayNames(session.Speakers) }}</h3>
     <p>{{ session.Abstract }}</p>
     <h5><strong>{{ session.Category }}</strong></h5>
-    <tag-list :tags="session.Tags" :selectedTags="selectedTags"></tag-list>
+    <span>{{ session.Rooms.join(', ') }}</span>
+    <tag-list :tags="session.Tags"></tag-list>
     <div v-show="false">{{ session }}</div>
     <hr>
   </div>
@@ -50,20 +51,20 @@ export default {
       return moment(time).format('dddd, MMM Do')
     },
     toggleInSchedule () {
-      if (!this.mySchedule.map((x) => x.Id).includes(this.session.Id)) {
-        this.addToSchedule(this.session)
+      if (!this.mySchedule.includes(this.session.Id)) {
+        this.addToSchedule(this.session.Id)
       } else {
-        this.removeFromSchedule(this.session)
+        this.removeFromSchedule(this.session.Id)
       }
     }
   },
   computed: {
     ...mapGetters([
-      'mySchedule',
-      'selectedTags'
+      'mySchedule'
+      // 'selectedTags'
     ]),
     isFilled () {
-      return this.mySchedule.filter((x) => x.Id === this.session.Id).length > 0
+      return this.mySchedule.filter((x) => x === this.session.Id).length > 0
     }
   },
   components: {

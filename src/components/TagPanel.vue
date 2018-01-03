@@ -30,7 +30,7 @@
       </button>
     </div>
     <div class="panel-block" v-show="selectedTags.length > 0">
-      <tag-list :tags="selectedTags"></tag-list>
+      <tag-list :tags="selectedTags" :special="tagSpecial"></tag-list>
     </div>    
   </div>
 </template>
@@ -42,12 +42,21 @@ import TagList from '@/components/TagList'
 
 export default {
   name: 'TagPanel',
+  props: {
+    tags: Array,
+    hidden: {
+      type: Boolean,
+      default: false
+    }
+  },
+  created () {
+    this.isHidden = this.hidden
+  },
   data () {
     return {
       isHidden: false
     }
   },
-  props: ['tags'],
   methods: {
     ...mapActions([
       'selectTag',
@@ -70,7 +79,10 @@ export default {
       // 'tags',
       'selectedTags',
       'tagAny'
-    ])
+    ]),
+    tagSpecial () {
+      return this.tagAny ? 'Any' : 'All'
+    }
   },
   components: {
     TagList
