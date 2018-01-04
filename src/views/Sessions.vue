@@ -13,7 +13,7 @@
       <div class="columns">
         <div class="column is-3">
           <!-- This should be removed once persistence is added -JBP 10/4/17 -->
-          This doesn't currently persist anywhere
+          Persistence should be added soon. (Posted 1/4/2018)
           <schedule-panel></schedule-panel>
         </div>
         <div class="column is-6">
