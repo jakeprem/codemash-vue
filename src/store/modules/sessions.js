@@ -25,6 +25,29 @@ var ajax = {
   }
 }
 
+var ls = {
+  set (key, value, ttl) {
+    let data = {
+      value,
+      expiresAt: new Date().getTime() + ttl
+    }
+    localStorage.setItem(key, JSON.stringify(data))
+  },
+  get (key) {
+    let rawData = localStorage.getItem(key)
+    let data = JSON.parse(rawData)
+
+    if (data !== null) {
+      if (data.expiresAt !== null && data.expiresAt < new Date().getTime()) {
+        localStorage.removeItem(key)
+      } else {
+        return data.value
+      }
+    }
+    return null
+  }
+}
+
 const state = {
   sessions: [],
   selectedTags: [],
@@ -58,11 +81,19 @@ const getters = {
 const actions = {
   getSessions ({ commit }) {
     return new Promise((resolve) => {
-      ajax.getSessionsData().then((data) => {
-        let sessionData = JSON.parse(data)
-        commit(types.SET_SESSIONS, sessionData)
+      let cachedSessions = ls.get('sessions')
+
+      if (cachedSessions != null) {
+        commit(types.SET_SESSIONS, cachedSessions)
         resolve()
-      })
+      } else {
+        ajax.getSessionsData().then((data) => {
+          let sessionData = JSON.parse(data)
+          commit(types.SET_SESSIONS, sessionData)
+          ls.set('sessions', sessionData, 3600000)
+          resolve()
+        })
+      }
     })
   },
   selectTag ({ commit }, selectedTag) {

@@ -12,7 +12,7 @@
     <h3 class="subtitle">{{ speakersDisplayNames(session.Speakers) }}</h3>
     <p>{{ session.Abstract }}</p>
     <h5><strong>{{ session.Category }}</strong></h5>
-    <span>{{ session.Rooms.join(', ') }}</span>
+    <span>Room: {{ session.Rooms.join(', ') }}</span>
     <tag-list :tags="session.Tags"></tag-list>
     <div v-show="false">{{ session }}</div>
     <hr>
