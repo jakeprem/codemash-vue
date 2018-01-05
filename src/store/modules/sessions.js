@@ -1,4 +1,6 @@
 import _ from 'lodash'
+// import * as firebase from 'firebase'
+// import 'firebase/firestore'
 
 import * as types from '../mutation-types'
 
@@ -87,10 +89,13 @@ const actions = {
         commit(types.SET_SESSIONS, cachedSessions)
         resolve()
       } else {
+        commit(types.SET_LOADING, true)
+
         ajax.getSessionsData().then((data) => {
           let sessionData = JSON.parse(data)
           commit(types.SET_SESSIONS, sessionData)
           ls.set('sessions', sessionData, 3600000)
+          commit(types.SET_LOADING, false)
           resolve()
         })
       }
@@ -106,10 +111,15 @@ const actions = {
     commit(types.CLEAR_SELECTED_TAGS)
   },
   addToSchedule ({ commit }, sessionId) {
+    // let db = firebase.firestore()
+    // console.log(JSON.stringify(db))
     commit(types.ADD_TO_SCHEDULE, sessionId)
   },
   removeFromSchedule ({ commit }, sessionId) {
     commit(types.REMOVE_FROM_SCHEDULE, sessionId)
+  },
+  clearSchedule ({commit}) {
+    commit(types.CLEAR_SCHEDULE)
   },
   setTagAnyFalse ({ commit }) {
     commit(types.SET_TAG_ANY_FALSE)
@@ -141,6 +151,9 @@ const mutations = {
   [types.REMOVE_FROM_SCHEDULE] (state, sessionId) {
     let index = state.mySchedule.indexOf(sessionId)
     state.mySchedule.splice(index, 1)
+  },
+  [types.CLEAR_SCHEDULE] (state) {
+    state.mySchedule = []
   },
   [types.SET_TAG_ANY_FALSE] (state) {
     state.tagAny = false

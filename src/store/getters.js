@@ -1,3 +1,5 @@
 export default {
-  isLoading: state => state.isLoading
+  getUser: state => state.user,
+  getError: state => state.error,
+  getLoading: state => state.loading
 }
