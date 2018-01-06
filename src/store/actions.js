@@ -1,5 +1,5 @@
 import * as firebase from 'firebase'
-// import router from '@/router'
+import {firebaseApp} from '@/firebaseInit'
 
 import * as types from './mutation-types'
 
@@ -9,10 +9,9 @@ export default {
 
     let provider = new firebase.auth.GoogleAuthProvider()
     provider.setCustomParameters({prompt: 'select_account'})
-    firebase.auth().signInWithPopup(provider)
+    firebaseApp.auth().signInWithPopup(provider)
       .then(result => {
         let user = result.user
-        // let token = result.credential.accessToken
 
         commit(types.SET_USER, user.uid)
         commit(types.SET_LOADING, false)
@@ -25,7 +24,7 @@ export default {
       })
   },
   logoutUser ({commit}) {
-    firebase.auth().signOut()
+    firebaseApp.auth().signOut()
     commit(types.SET_USER, null)
     commit(types.CLEAR_SCHEDULE)
   },

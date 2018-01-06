@@ -12,8 +12,7 @@
       </div>
       <div class="columns">
         <div class="column is-3">
-          <!-- This should be removed once persistence is added -JBP 10/4/17 -->
-          Persistence should be added soon. (Posted 1/4/2018)
+          Persistence is added. Right now you can't favorite sessions unless you're logged in.
           <schedule-panel></schedule-panel>
         </div>
         <div class="column is-6">
@@ -135,11 +134,6 @@
       selectDate (clickedDate) {
         this.selectedDate = clickedDate
         this.page = 0
-      }
-    },
-    created () {
-      if (this.sessions.length === 0) {
-        this.$store.dispatch('getSessions')
       }
     }
   }

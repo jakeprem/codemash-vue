@@ -1,11 +1,8 @@
 import _ from 'lodash'
-// import * as firebase from 'firebase'
-// import 'firebase/firestore'
 
 import * as types from '../mutation-types'
 
-// import sessionData from '@/data/sessions'
-// import sessionData from '@/data/kizmash_sessions'
+import {firebaseDb} from '@/firebaseInit'
 
 var ajax = {
   getSessionsData () {
@@ -67,6 +64,13 @@ const getters = {
   },
   mySchedule: state => state.mySchedule,
   mySessions: state => state.sessions.filter(x => state.mySchedule.includes(x.Id)),
+  myScheduleDates: state => {
+    let mySessions = state.sessions.filter(x => state.mySchedule.includes(x.Id))
+    let startTimes = mySessions.map(x => x.SessionStartTime, mySessions)
+
+    // This isn't the proper return value
+    return startTimes
+  },
   myScheduleByStartTime: state => {
     let mySessions = state.sessions.filter(x => state.mySchedule.includes(x.Id))
 
@@ -101,6 +105,25 @@ const actions = {
       }
     })
   },
+  getSchedule ({getters, commit}) {
+    return new Promise((resolve) => {
+      let userId = getters.getUser
+      if (!userId) {
+        commit(types.SET_SCHEDULE, [])
+        return
+      }
+      let userRef = firebaseDb.collection('users').doc(userId)
+      userRef.get()
+        .then(docSnapshot => {
+          var sessions = []
+          if (docSnapshot.exists && docSnapshot.data().sessions) {
+            sessions = docSnapshot.data().sessions
+          }
+          commit(types.SET_SCHEDULE, sessions)
+          resolve()
+        })
+    })
+  },
   selectTag ({ commit }, selectedTag) {
     commit(types.SELECT_TAG, selectedTag)
   },
@@ -110,13 +133,43 @@ const actions = {
   clearSelectedTags ({ commit }) {
     commit(types.CLEAR_SELECTED_TAGS)
   },
-  addToSchedule ({ commit }, sessionId) {
-    // let db = firebase.firestore()
-    // console.log(JSON.stringify(db))
-    commit(types.ADD_TO_SCHEDULE, sessionId)
+  addToSchedule ({ getters, commit }, sessionId) {
+    let userId = getters.getUser
+    if (!userId) {
+      return
+    }
+    let userRef = firebaseDb.collection('users').doc(userId)
+    userRef.get()
+      .then(docSnapshot => {
+        if (docSnapshot.exists && docSnapshot.data().sessions) {
+          let sessions = docSnapshot.data().sessions
+          sessions.push(sessionId)
+          userRef.set({sessions})
+        } else {
+          userRef.set({sessions: [sessionId]})
+        }
+        commit(types.ADD_TO_SCHEDULE, sessionId)
+      })
   },
-  removeFromSchedule ({ commit }, sessionId) {
-    commit(types.REMOVE_FROM_SCHEDULE, sessionId)
+  removeFromSchedule ({ getters, commit }, sessionId) {
+    let userId = getters.getUser
+    if (!userId) {
+      return
+    }
+    let userRef = firebaseDb.collection('users').doc(userId)
+    userRef.get()
+      .then(docSnapshot => {
+        if (docSnapshot.exists && docSnapshot.data().sessions) {
+          let sessions = docSnapshot.data().sessions
+          let index = sessions.indexOf(sessionId)
+
+          sessions.splice(index, 1)
+          userRef.set({sessions})
+        } else {
+          userRef.set({sessions: []})
+        }
+        commit(types.REMOVE_FROM_SCHEDULE, sessionId)
+      })
   },
   clearSchedule ({commit}) {
     commit(types.CLEAR_SCHEDULE)
@@ -151,6 +204,9 @@ const mutations = {
   [types.REMOVE_FROM_SCHEDULE] (state, sessionId) {
     let index = state.mySchedule.indexOf(sessionId)
     state.mySchedule.splice(index, 1)
+  },
+  [types.SET_SCHEDULE] (state, sessions) {
+    state.mySchedule = sessions
   },
   [types.CLEAR_SCHEDULE] (state) {
     state.mySchedule = []
