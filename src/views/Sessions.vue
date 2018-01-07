@@ -12,7 +12,6 @@
       </div>
       <div class="columns">
         <div class="column is-3">
-          Persistence is added. Right now you can't favorite sessions unless you're logged in.
           <schedule-panel></schedule-panel>
         </div>
         <div class="column is-6">
@@ -79,6 +78,10 @@
       },
       selectedSessions () {
         return this.sessionsByDate[this.activeDate]
+      },
+      // A stub to filter by speaker id
+      filterSpeakers(si){
+        return this.sessions.filter(x => x.Speakers.map(y => y.Id).includes(si)),
       },
       filteredSessions () {
         // TODO Renable search: Search needs to be run against each individual day so that sorting by search relevance will still

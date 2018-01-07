@@ -112,14 +112,21 @@ const actions = {
         commit(types.SET_SCHEDULE, [])
         return
       }
-      let userRef = firebaseDb.collection('users').doc(userId)
+      var userRef = firebaseDb.collection('users').doc(userId)
       userRef.get()
         .then(docSnapshot => {
           var sessions = []
           if (docSnapshot.exists && docSnapshot.data().sessions) {
-            sessions = docSnapshot.data().sessions
+            let currentSessions = getters.mySchedule
+            let mergeSessions = currentSessions.concat(docSnapshot.data().sessions)
+            let mergeSet = new Set(mergeSessions)
+            sessions = Array.from(mergeSet)
+          }
+          if (getters.mySchedule) {
+            userRef.set({sessions})
           }
           commit(types.SET_SCHEDULE, sessions)
+          localStorage.setItem('mySchedule', getters.mySchedule)
           resolve()
         })
     })
@@ -136,6 +143,7 @@ const actions = {
   addToSchedule ({ getters, commit }, sessionId) {
     let userId = getters.getUser
     if (!userId) {
+      commit(types.ADD_TO_SCHEDULE, sessionId)
       return
     }
     let userRef = firebaseDb.collection('users').doc(userId)
@@ -144,16 +152,19 @@ const actions = {
         if (docSnapshot.exists && docSnapshot.data().sessions) {
           let sessions = docSnapshot.data().sessions
           sessions.push(sessionId)
-          userRef.set({sessions})
+          let sessionSet = new Set(sessions)
+          userRef.set({sessions: Array.from(sessionSet)})
         } else {
           userRef.set({sessions: [sessionId]})
         }
         commit(types.ADD_TO_SCHEDULE, sessionId)
+        localStorage.setItem('mySchedule', getters.mySchedule)
       })
   },
   removeFromSchedule ({ getters, commit }, sessionId) {
     let userId = getters.getUser
     if (!userId) {
+      commit(types.REMOVE_FROM_SCHEDULE, sessionId)
       return
     }
     let userRef = firebaseDb.collection('users').doc(userId)
@@ -169,6 +180,7 @@ const actions = {
           userRef.set({sessions: []})
         }
         commit(types.REMOVE_FROM_SCHEDULE, sessionId)
+        localStorage.setItem('mySchedule', getters.mySchedule)
       })
   },
   clearSchedule ({commit}) {
