@@ -80,8 +80,8 @@
         return this.sessionsByDate[this.activeDate]
       },
       // A stub to filter by speaker id
-      filterSpeakers(si){
-        return this.sessions.filter(x => x.Speakers.map(y => y.Id).includes(si)),
+      filterSpeakers (si) {
+        return this.sessions.filter(x => x.Speakers.map(y => y.Id).includes(si))
       },
       filteredSessions () {
         // TODO Renable search: Search needs to be run against each individual day so that sorting by search relevance will still
