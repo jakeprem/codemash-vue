@@ -7,7 +7,7 @@
             v-for="date in dates"
             :key="date"
             @click="selectDate(date)"
-            :class="{'is-active': activeDate == date}"><a>{{formatDate(date)}}</a></li>
+            :class="{'is-active': activeDate == date}"><a>{{date}}</a></li>
         </ul>
       </div>
       <div class="columns">
@@ -15,7 +15,7 @@
           <schedule-panel></schedule-panel>
         </div>
         <div class="column is-6">
-          <session-list :sessions="myScheduleByStartTime[activeDate]"></session-list>
+          <session-list :sessions="sessionsByDate[activeDate]"></session-list>
         </div>
         <div class="column is-3">
           <!-- <tag-panel :tags="tags"></tag-panel> -->
@@ -33,6 +33,7 @@ import TagPanel from '@/components/TagPanel'
 import SchedulePanel from '@/components/SchedulePanel'
 
 import moment from 'moment/min/moment.min'
+import _ from 'lodash'
 
 export default {
   data () {
@@ -52,7 +53,12 @@ export default {
       'tags'
     ]),
     dates () {
-      let dates = Object.keys(this.myScheduleByStartTime)
+      let allDates = Object.keys(this.myScheduleByStartTime)
+      let formattedDates = allDates.map(x => {
+        return this.formatDate(x)
+      })
+      let dates = Array.from(new Set(formattedDates))
+      // let dates = Object.keys(this.myScheduleByStartTime)
 
       if (!dates.includes(this.selectedDate)) {
         this.selectedDate = ''
@@ -61,15 +67,22 @@ export default {
     },
     activeDate () {
       return this.selectedDate || this.dates[0]
+    },
+    sessionsByDate () {
+      console.log(this.mySessions)
+      console.log(_.groupBy(this.mySessions, this.getDate))
+      return _.groupBy(this.mySessions, this.getDate)
     }
   },
   methods: {
     selectDate (clickedDate) {
       this.selectedDate = clickedDate
     },
-    formatDate (time) {
-      // return moment(time).format('dddd MM/DD, h:mm A')
-      return moment(time).format('dddd h:mm A')
+    formatDate (sessionStartTime) {
+      return moment(sessionStartTime).format('ddd, MMM Do, YY')
+    },
+    getDate (session) {
+      return moment(session.SessionStartTime).format('ddd, MMM Do, YY')
     }
   }
 }
