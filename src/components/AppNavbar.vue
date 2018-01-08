@@ -24,20 +24,22 @@
           <i class="fa" :class="link.icon"></i> 
           &nbsp; {{ link.text || link.name }}
         </router-link>
-        <!-- <span class="nav-item">
-          <a class="button">
-            Log in
+        <span class="nav-item">
+          <a class="button is-info" v-if="getUser" @click="logoutUser">
+            Log out
           </a>
-          <a class="button is-info">
-            Sign up
+          <a class="button" v-else  @click="loginUser" :disabled="getLoading">
+            Log in with Google
           </a>
-        </span> -->
+        </span>
       </div>
     </div>
   </nav>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'AppNavbar',
   data () {
@@ -61,6 +63,18 @@ export default {
         }
       ]
     }
+  },
+  computed: {
+    ...mapGetters([
+      'getLoading',
+      'getUser'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'loginUser',
+      'logoutUser'
+    ])
   }
 }
 </script>

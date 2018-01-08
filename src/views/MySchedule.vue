@@ -68,7 +68,8 @@ export default {
       this.selectedDate = clickedDate
     },
     formatDate (time) {
-      return moment(time).format('ddd, MMM Do, YY')
+      // return moment(time).format('dddd MM/DD, h:mm A')
+      return moment(time).format('dddd h:mm A')
     }
   }
 }

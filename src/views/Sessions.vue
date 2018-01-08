@@ -12,8 +12,6 @@
       </div>
       <div class="columns">
         <div class="column is-3">
-          <!-- This should be removed once persistence is added -JBP 10/4/17 -->
-          Persistence should be added soon. (Posted 1/4/2018)
           <schedule-panel></schedule-panel>
         </div>
         <div class="column is-6">
@@ -81,6 +79,10 @@
       selectedSessions () {
         return this.sessionsByDate[this.activeDate]
       },
+      // A stub to filter by speaker id
+      filterSpeakers (si) {
+        return this.sessions.filter(x => x.Speakers.map(y => y.Id).includes(si))
+      },
       filteredSessions () {
         // TODO Renable search: Search needs to be run against each individual day so that sorting by search relevance will still
         // work correctly.
@@ -135,11 +137,6 @@
       selectDate (clickedDate) {
         this.selectedDate = clickedDate
         this.page = 0
-      }
-    },
-    created () {
-      if (this.sessions.length === 0) {
-        this.$store.dispatch('getSessions')
       }
     }
   }

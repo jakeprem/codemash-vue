@@ -11,7 +11,10 @@ Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
 
 const state = {
-  exampleState: false
+  exampleState: false,
+  user: null,
+  error: null,
+  loading: false
 }
 
 export default new Vuex.Store({
